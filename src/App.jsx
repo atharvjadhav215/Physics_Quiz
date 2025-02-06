@@ -1,17 +1,15 @@
 import { useState } from "react";
+import img1 from "./assets/img1.jpg";
+import img2 from "./assets/img2.jpg";
+import img3 from "./assets/img3.jpg";
+import img4 from "./assets/img4.jpg";
 
-const questions = [
-  "https://plus.unsplash.com/premium_photo-1673029925648-af80569efc46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-  "https://images.unsplash.com/photo-1738363436637-ee6f4a910715?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-  "https://images.unsplash.com/photo-1738326310407-38b3e0156453?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzfHx8ZW58MHx8fHx8",
-  "https://plus.unsplash.com/premium_photo-1674675646896-456033a4b629?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8",
-  "https://images.unsplash.com/photo-1738230077816-fbab6232c545?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0fHx8ZW58MHx8fHx8",
-  "https://images.unsplash.com/photo-1738330094149-03cc30132bbb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8",
-  "https://images.unsplash.com/photo-1738000711416-a22d5ad609a8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw3fHx8ZW58MHx8fHx8",
-  "https://images.unsplash.com/photo-1738251248377-43d3f369ee4b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1738247999456-97df5721f8cc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw4fHx8ZW58MHx8fHx8",
-  "https://images.unsplash.com/photo-1738273473785-99c1fc498c14?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D",
-];
+const questions = [img1, img2, img3, img4];
+const divisions = ["CS5", "ET1"];
+const rollNumberRanges = {
+  CS5: { start: 1, end: 92 },
+  ET1: { start: 21, end: 61 },
+};
 
 const getQuestionForStudent = (division, rollNumber) => {
   const studentId = `${division}-${rollNumber}`;
@@ -33,60 +31,103 @@ const App = () => {
     setShowPopup(true);
   };
 
+  const rollNumbers = division
+    ? Array.from(
+        {
+          length:
+            rollNumberRanges[division].end -
+            rollNumberRanges[division].start +
+            1,
+        },
+        (_, i) => rollNumberRanges[division].start + i
+      )
+    : [];
+
   return (
-    <div className="flex justify-center items-center h-screen bg-slate-800">
-      <div className="bg-white p-6 rounded-lg w-[400px] text-center shadow-2xl shadow-black">
-        <h1 className="text-2xl font-bold mb-4">PHYSICS QUIZ</h1>
-        <form onSubmit={handleSubmit} className="mb-4">
-          <label className="block mb-2">Enter Your Batch:</label>
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-900 to-gray-900 text-white p-6">
+      <div className="bg-gray-800 p-8 rounded-xl w-[450px] text-center shadow-2xl shadow-slate-400 border border-gray-700">
+        <h1 className="text-3xl font-extrabold mb-6 text-slate-100">
+          Dataset for Experiment 1
+        </h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <label className="block text-lg font-semibold">
+            Select Your Division:
+          </label>
           <select
             value={division}
-            onChange={(e) => setDivision(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded mb-3"
+            onChange={(e) => {
+              setDivision(e.target.value);
+              setRollNumber("");
+            }}
+            className="w-full p-3 border border-gray-500 bg-gray-700 rounded focus:ring-2 focus:ring-slate-100"
             required
           >
             <option value="">Select Batch</option>
-            <option value="C51">C51</option>
-            <option value="C52">C52</option>
-            <option value="C53">C53</option>
-            <option value="C54">C54</option>
-            <option value="E12">E12</option>
-            <option value="E13">E13</option>
+            {divisions.map((div) => (
+              <option key={div} value={div} className="bg-gray-800">
+                {div}
+              </option>
+            ))}
           </select>
-          <label className="block mb-2">Enter Your Roll Number:</label>
-          <input
-            type="number"
+
+          <label className="block text-lg font-semibold">
+            Enter Your Roll Number:
+          </label>
+          <select
             value={rollNumber}
             onChange={(e) => setRollNumber(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded mb-3"
-            placeholder="Roll Number"
+            className="w-full p-3 border border-gray-500 bg-gray-700 rounded focus:ring-2 focus:ring-slate-100"
             required
-          />
+            disabled={!division}
+          >
+            <option value="">Select Roll Number</option>
+            {rollNumbers.map((num) => (
+              <option key={num} value={num} className="bg-gray-800">
+                {num}
+              </option>
+            ))}
+          </select>
+
           <button
             type="submit"
-            className="w-full bg-slate-700 text-white hover:border-black hover:border-1 font-bold hover:shadow-2xl hover:shadow-black py-2 rounded hover:bg-black transform transition-all ease-in-out hover:scale-105 duration-500"
+            className="w-full bg-slate-100 text-gray-900 font-bold py-3 rounded-lg hover:bg-slate-300 transition transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-not-allowed"
+            disabled={!rollNumber}
           >
-            See Question...
+            Get Your Question
           </button>
         </form>
-        {showPopup && question && (
-          <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-80">
-            <div className="relative bg-gray-500 p-4 rounded-lg shadow-lg  transform transition-all ease-in-out hover:scale-105 duration-1000">
-              <button
-                className="absolute top-2 right-2 bg-gray-200 text-white px-2 py-1 rounded-full  transform transition-all ease-in-out hover:scale-150 duration-500"
-                onClick={() => setShowPopup(false)}
-              >
-                ✖
-              </button>
+      </div>
+
+      {showPopup && question && (
+        <div
+          className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-80 backdrop-blur-md"
+          onClick={() => setShowPopup(false)}
+        >
+          <div
+            className="relative bg-gray-900 p-6 rounded-lg shadow-lg w-auto h-auto [500px] text-center border border-gray-600"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1 rounded-full text-lg hover:scale-125 transition-transform"
+              onClick={() => setShowPopup(false)}
+            >
+              ✖
+            </button>
+            <h2 className="text-4xl font-bold mb-4 text-slate-400">
+              Your Question
+            </h2>
+            <div className="relative w-full flex justify-center items-center">
               <img
                 src={question}
                 alt="Question"
-                className="w-full h-auto rounded"
+                className="w-full  rounded-lg shadow-md select-none pointer-events-none"
+                draggable="false"
+                onContextMenu={(e) => e.preventDefault()}
               />
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
